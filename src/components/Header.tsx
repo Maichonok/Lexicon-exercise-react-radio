@@ -6,7 +6,7 @@ import {
 } from "@ant-design/icons";
 import { Menu } from "antd";
 import { useState } from "react";
-import { Outlet, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 interface MenuItem {
   label: string | JSX.Element;
@@ -26,9 +26,9 @@ const Header = () => {
 
   const items: MenuItem[] = [
     { key: "h", label: "Home", icon: <HomeTwoTone /> },
-    { key: "k", label: "Kanal", icon: <CustomerServiceOutlined /> },
-    { key: "p", label: "Program", icon: <VideoCameraOutlined /> },
-    { key: "m", label: "Mina sida", icon: <UserOutlined /> },
+    { key: "c", label: "Channels", icon: <CustomerServiceOutlined /> },
+    { key: "p", label: "Programs", icon: <VideoCameraOutlined /> },
+    { key: "m", label: "My profile", icon: <UserOutlined /> },
   ];
 
   return (
@@ -40,7 +40,6 @@ const Header = () => {
           </Menu.Item>
         ))}
       </Menu>
-      <Outlet />
     </>
   );
 };
