@@ -1,3 +1,4 @@
+import { Pagination } from "antd";
 import React, { useState, useEffect } from "react";
 
 interface Program {
@@ -10,16 +11,20 @@ interface Program {
 
 const Programs: React.FC = () => {
   const [programs, setPrograms] = useState<Program[]>([]);
+  const [totalPrograms, setTotalPrograms] = useState<number>(0);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(10);
 
   useEffect(() => {
     const fetchPrograms = async () => {
       try {
         const response = await fetch(
-          "http://api.sr.se/api/v2/programs/?format=json"
+          `http://api.sr.se/api/v2/programs/?format=json&page=${currentPage}&size=${pageSize}`
         );
         if (response.ok) {
           const data = await response.json();
           setPrograms(data.programs);
+          setTotalPrograms(data.pagination.totalhits);
         } else {
           console.error("Failed to fetch programs");
         }
@@ -29,7 +34,12 @@ const Programs: React.FC = () => {
     };
 
     fetchPrograms();
-  }, []);
+  }, [currentPage, pageSize]);
+
+  const handlePageChange = (page: number, pageSize?: number) => {
+    setCurrentPage(page);
+    setPageSize(pageSize || 10);
+  };
 
   return (
     <div>
@@ -42,6 +52,12 @@ const Programs: React.FC = () => {
           </li>
         ))}
       </ul>
+      <Pagination
+        onChange={handlePageChange}
+        current={currentPage}
+        total={totalPrograms} 
+        pageSize={pageSize}
+      />
     </div>
   );
 };
