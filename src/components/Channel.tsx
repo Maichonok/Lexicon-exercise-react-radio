@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Pagination } from "antd";
 import { useNavigate } from 'react-router-dom';
-import ChannelInfo from "./ChannelInfo";
 
 interface Channel {
   id: number;
@@ -64,7 +63,6 @@ const Channels: React.FC = () => {
           </li>
         ))}
       </ul>
-      {selectedChannel && <ChannelInfo channelId={selectedChannel.id} />}
       <Pagination
         onChange={handlePageChange}
         current={currentPage}

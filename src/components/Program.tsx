@@ -1,5 +1,6 @@
 import { Pagination } from "antd";
 import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 
 interface Program {
   id: number;
@@ -14,6 +15,8 @@ const Programs: React.FC = () => {
   const [totalPrograms, setTotalPrograms] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(10);
+  const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPrograms = async () => {
@@ -41,6 +44,11 @@ const Programs: React.FC = () => {
     setPageSize(pageSize || 10);
   };
 
+  const handleViewInfo = (program: Program) => {
+    setSelectedProgram(program);
+    navigate(`/programs/${program.id}`);
+  };
+
   return (
     <div>
       <h1>Programs</h1>
@@ -49,6 +57,8 @@ const Programs: React.FC = () => {
           <li key={program.id}>
             <strong>{program.name}</strong> - {program.description}
             <img src={program.programimage} alt={program.name} />{" "}
+            <button onClick={() => handleViewInfo(program)}>View Info</button>
+
           </li>
         ))}
       </ul>
