@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Pagination } from "antd";
+import { useNavigate } from 'react-router-dom';
 import ChannelInfo from "./ChannelInfo";
+
 interface Channel {
   id: number;
   name: string;
@@ -18,7 +20,7 @@ const Channels: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(10);
   const [selectedChannel, setSelectedChannel] = useState<Channel | null>(null);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchChannels = async () => {
       try {
@@ -45,22 +47,9 @@ const Channels: React.FC = () => {
     setPageSize(pageSize || 10);
   };
 
-  const handleViewInfo = async (channel: Channel) => {
-    try {
-      const response = await fetch(
-        `https://api.sr.se/api/v2/channels/${channel.id}?format=json`
-      );
-      if (response.ok) {
-        const data = await response.json();
-        setSelectedChannel(data.channel);
-        // Открываем новую вкладку с информацией о канале
-        window.open(data.channel.siteurl, "_blank");
-      } else {
-        console.error("Failed to fetch channel info");
-      }
-    } catch (error) {
-      console.error("Error fetching channel info:", error);
-    }
+  const handleViewInfo = (channel: Channel) => {
+    setSelectedChannel(channel);
+    navigate(`/channels/${channel.id}`);
   };
 
   return (
@@ -75,13 +64,13 @@ const Channels: React.FC = () => {
           </li>
         ))}
       </ul>
+      {selectedChannel && <ChannelInfo channelId={selectedChannel.id} />}
       <Pagination
         onChange={handlePageChange}
         current={currentPage}
         total={totalChannels}
         pageSize={pageSize}
       />
-      {selectedChannel && <ChannelInfo channel={selectedChannel} />}
     </div>
   );
 };
